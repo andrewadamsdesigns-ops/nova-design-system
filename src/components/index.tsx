@@ -1,4 +1,4 @@
-import { useId, type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactNode } from 'react'
+import { useId, useRef, type ButtonHTMLAttributes, type HTMLAttributes, type InputHTMLAttributes, type ReactNode } from 'react'
 
 const cx = (...parts: Array<string | false | null | undefined>) => parts.filter(Boolean).join(' ')
 
@@ -74,10 +74,12 @@ export function Panel({ variant = 'raised', flush, as: Tag = 'section', classNam
   return <Tag className={cx('nv-panel', variant === 'sunken' && 'nv-panel--sunken', flush && 'nv-panel--flush', className)} {...rest} />
 }
 
-export function PanelHeader({ title, action }: { title: ReactNode; action?: ReactNode }) {
+/** The panel's title is a real heading (h2 by default) styled as a label, so screen readers get an outline. */
+export function PanelHeader({ title, action, level = 2, id }: { title: ReactNode; action?: ReactNode; level?: 2 | 3 | 4; id?: string }) {
+  const H = `h${level}` as 'h2' | 'h3' | 'h4'
   return (
     <div className="nv-panel__header">
-      <Label>{title}</Label>
+      <H id={id} className="nv-panel__title">{title}</H>
       {action}
     </div>
   )
@@ -117,25 +119,63 @@ export function Toggle({ checked, onChange, children, disabled }: { checked: boo
 
 /* Segmented control: one choice from a short list. Arrow keys move the choice. */
 
-export function Segmented<T extends string>({ options, value, onChange, label }: { options: Array<{ value: T; label: string }>; value: T; onChange: (v: T) => void; label: string }) {
+export function Segmented<T extends string>({ options, value, onChange, label, hideLabel = false }: {
+  options: Array<{ value: T; label: string }>; value: T; onChange: (v: T) => void; label: string
+  /** The label is visible by default. Hide it only when a nearby heading already names the choice. */
+  hideLabel?: boolean
+}) {
+  const labelId = useId()
+  const refs = useRef<Array<HTMLButtonElement | null>>([])
   const move = (dir: number) => {
     const i = options.findIndex((o) => o.value === value)
-    onChange(options[(i + dir + options.length) % options.length].value)
+    const next = (i + dir + options.length) % options.length
+    onChange(options[next].value)
+    refs.current[next]?.focus() // focus follows the choice, as a radio group should
   }
   return (
-    <div className="nv-segmented" role="radiogroup" aria-label={label}
-      onKeyDown={(e) => {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); move(1) }
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); move(-1) }
-      }}>
-      {options.map((o) => (
-        <button key={o.value} type="button" role="radio" aria-checked={o.value === value} tabIndex={o.value === value ? 0 : -1}
-          className="nv-segmented__option" onClick={() => onChange(o.value)}>
-          {o.label}
-        </button>
-      ))}
+    <div className="nv-segmented-field">
+      <span id={labelId} className={cx('nv-label', hideLabel && 'nv-visually-hidden')}>{label}</span>
+      <div className="nv-segmented" role="radiogroup" aria-labelledby={labelId}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); move(1) }
+          if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); move(-1) }
+        }}>
+        {options.map((o, i) => (
+          <button key={o.value} ref={(el) => { refs.current[i] = el }} type="button" role="radio" aria-checked={o.value === value}
+            tabIndex={o.value === value ? 0 : -1} className="nv-segmented__option" onClick={() => onChange(o.value)}>
+            {o.label}
+          </button>
+        ))}
+      </div>
     </div>
   )
+}
+
+/* Stack: vertical or horizontal spacing from the space scale, so screens never need inline layout styles. */
+
+type Space = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11
+
+export function Stack({ gap = 5, direction = 'column', align, justify, wrap, className, style, ...rest }: HTMLAttributes<HTMLDivElement> & {
+  gap?: Space; direction?: 'column' | 'row'; align?: 'start' | 'center' | 'end' | 'stretch'; justify?: 'start' | 'center' | 'end' | 'between'; wrap?: boolean
+}) {
+  const j = justify === 'between' ? 'space-between' : justify
+  return (
+    <div className={cx('nv-stack', className)}
+      style={{ flexDirection: direction, gap: `var(--nv-space-${gap})`, alignItems: align, justifyContent: j, flexWrap: wrap ? 'wrap' : undefined, ...style }}
+      {...rest} />
+  )
+}
+
+/* Page: centers content at a readable width. */
+
+export function Page({ width = 'md', className, ...rest }: HTMLAttributes<HTMLElement> & { width?: 'sm' | 'md' | 'lg' }) {
+  return <main className={cx('nv-page', `nv-page--${width}`, className)} {...rest} />
+}
+
+/* Text: body copy in the three text colors. */
+
+export function Text({ tone = 'primary', size = 'md', className, ...rest }: HTMLAttributes<HTMLSpanElement> & { tone?: 'primary' | 'secondary' | 'muted'; size?: 'sm' | 'md' | 'lg' }) {
+  return <span className={cx('nv-text', `nv-text--${tone}`, `nv-text--${size}`, className)} {...rest} />
 }
 
 /* Tag */

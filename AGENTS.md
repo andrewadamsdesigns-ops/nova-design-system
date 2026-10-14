@@ -4,13 +4,15 @@ You are an AI coding agent working in a project that uses the Nova design system
 
 ## The rules
 
-1. **Build only from Nova components and tokens.** No hex codes, no rgb(), no new box-shadows, no new font sizes in your code. If you need a value, it is a `--nv-*` variable.
+1. **Build only from Nova components and tokens.** No hex codes, no rgb(), no new box-shadows, no new font sizes, and no layout sizes (px, rem, %) in your code. Use `Stack` for spacing and `Page` for width. If you still need a value, it is a `--nv-*` variable.
 2. **If a component is missing, stop and say so.** Do not build a near-copy of an existing component with different styles. Write down what you needed and why, then use the closest existing piece.
-3. **One primary button per screen.** `variant="primary"` marks the single most important action. Everything else is a default or ghost button.
+3. **At most one primary button per screen.** `variant="primary"` marks the single most important action. If the screen has no single main action (for example, settings that apply instantly), use no primary button at all. A small form inside a larger screen gets a default button.
 4. **A status light never carries meaning alone.** Use `<Status>` (light + label), not a bare `<Led>`, unless the light sits inside a `<Key>` that already has a label.
 5. **Raised means pressable. Pressed-in means typed into, or switched on.** Don't put the raised shadow on things people can't press.
 6. **Labels are short and uppercase-by-style.** Write them in normal case in code (`<Label>System status</Label>`). The CSS uppercases them, and screen readers read them normally.
-7. **Check all four themes before you call a screen done:** `nova`, `nova-dark`, `flat`, `flat-dark`. Set `data-theme` on `<html>`. If anything looks wrong in one theme, you used a raw value somewhere.
+7. **Headings come from `PanelHeader`.** It renders a real heading (`level` 2 by default). Give the page one `h1`, then keep levels in order: a panel inside a section is `level={3}`.
+8. **Never destroy something without a confirmation step.** Nova has no dialog yet. If your screen deletes data, say so in your notes instead of skipping the confirmation. (Signing out is not destructive.)
+9. **Check all four themes before you call a screen done:** `nova`, `nova-dark`, `flat`, `flat-dark`. Set `data-theme` on `<html>`. If anything looks wrong in one theme, you used a raw value somewhere.
 
 ## Setup
 
@@ -33,10 +35,13 @@ Wrap the app in `className="nv-root"` so the background, text color and font are
 | `Button` (`variant`: default, primary, ghost, danger; `size`: sm, md, lg) | Actions | Navigation between pages (use a link) |
 | `Key` (`icon`, `label`, `pressed`, `led`) | Modes, tools, the current section | Form submission |
 | `Status` (`on`, `tone`) / `Led` | System state: online, offline, listening | Decoration |
-| `Panel` (`variant`: raised, sunken; `flush`) + `PanelHeader` | Grouping related content | Wrapping a single button |
+| `Panel` (`variant`: raised, sunken; `flush`) + `PanelHeader` (`title`, `level`, `action`) | Grouping related content. `PanelHeader` is the panel's heading | Wrapping a single button |
 | `Field` (`label`, `hint`, `error`, `multiline`) | Every text input. It wires the label and errors for screen readers | Search boxes without a visible label (add one) |
 | `Toggle` (`checked`, `onChange`) | On/off settings that apply right away | Choices that need a Save button (use a checkbox in a form) |
-| `Segmented` (`options`, `value`, `onChange`, `label`) | One choice from 2–5 | More than 5 options (use a select) |
+| `Segmented` (`options`, `value`, `onChange`, `label`, `hideLabel`) | One choice from 2–5. The label is visible by default | More than 5 options (use a select) |
+| `Stack` (`gap` 1–11, `direction`, `align`, `justify`, `wrap`) | All spacing between things | — |
+| `Page` (`width`: sm, md, lg) | Centering a screen at a readable width | — |
+| `Text` (`tone`: primary, secondary, muted; `size`: sm, md, lg) | Body copy and values, like an account name | Labels (use `Label`) |
 | `Tag` (`accent`) | Small facts: status, type, version | Buttons |
 | `Display` (`lines`, `cursor`) | System messages and short logs | Long reading or chat history |
 | `Grill` (`size`, `rings`, `active`, `label`) | Nova's signature mark and a voice-activity meter | Loading spinners |
@@ -54,7 +59,7 @@ The source of truth is `tokens/tokens.json`. `npm run tokens` regenerates `src/s
 
 ## Before you say "done"
 
-- [ ] No raw colors, shadows or font sizes in the code you wrote (search for `#`, `rgb`, `px` in style props).
+- [ ] No raw colors, shadows, font sizes or layout sizes in the code you wrote (search for `#`, `rgb`, `px`, `rem`, `style=`).
 - [ ] At most one primary button on the screen.
 - [ ] Every input has a visible label. Every light has a text label.
 - [ ] Keyboard works: Tab reaches every control, focus rings are visible, the segmented control moves with arrow keys.

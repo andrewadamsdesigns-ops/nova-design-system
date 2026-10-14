@@ -44,6 +44,9 @@
   --nv-control-md: 40px;
   --nv-control-lg: 48px;
   --nv-control-key: 64px;
+  --nv-width-sm: 32rem;
+  --nv-width-md: 40rem;
+  --nv-width-lg: 64rem;
 }
 
 :root, [data-theme="nova"] {

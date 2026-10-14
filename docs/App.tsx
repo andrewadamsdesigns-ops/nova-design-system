@@ -40,7 +40,7 @@ function Section({ id, index, title, intro, children }: { id: string; index: str
 function Specimen({ name, children, note }: { name: string; children: ReactNode; note?: string }) {
   return (
     <Panel as="article" className="doc-specimen">
-      <PanelHeader title={name} />
+      <PanelHeader title={name} level={3} />
       <div className="doc-specimen__stage">{children}</div>
       {note && <p className="doc-note">{note}</p>}
     </Panel>
@@ -93,7 +93,7 @@ export function App() {
         <div className="doc-bar__brand">
           <Grill size={22} rings={3} />
           <Wordmark size={14}>Nova</Wordmark>
-          <Tag>v0.1</Tag>
+          <Tag>v0.2</Tag>
         </div>
         <nav aria-label="Sections" className="doc-bar__nav">
           <a href="#foundations">Foundations</a>
@@ -103,7 +103,7 @@ export function App() {
         </nav>
         <div className="doc-bar__end">
           <a className="doc-bar__gh" href="https://github.com/andrewadamsdesigns-ops/nova-design-system">GitHub</a>
-          <Segmented label="Theme" options={THEMES} value={theme} onChange={setTheme} />
+          <Segmented label="Theme" hideLabel options={THEMES} value={theme} onChange={setTheme} />
         </div>
       </header>
 
@@ -146,7 +146,7 @@ export function App() {
 
           <div className="doc-grid doc-grid--2">
             <Panel>
-              <PanelHeader title="Type" />
+              <PanelHeader title="Type" level={3} />
               <div className="doc-type">
                 <div><Wordmark size={28}>Nova</Wordmark><code>display · Krona One</code></div>
                 <div><span style={{ fontSize: 32, fontWeight: 600, letterSpacing: '-0.01em' }}>Calm over clever</span><code>2xl · IBM Plex Sans 600</code></div>
@@ -155,7 +155,7 @@ export function App() {
               </div>
             </Panel>
             <Panel>
-              <PanelHeader title="Depth" />
+              <PanelHeader title="Depth" level={3} />
               <div className="doc-depth">
                 <div className="doc-depth__tile" style={{ boxShadow: 'var(--nv-shadow-raised)' }}><Label>Raised</Label></div>
                 <div className="doc-depth__tile" style={{ boxShadow: 'var(--nv-shadow-card)' }}><Label>Card</Label></div>
@@ -168,7 +168,7 @@ export function App() {
         </Section>
 
         <Section id="components" index="02" title="Components"
-          intro="Ten pieces. Each one is a CSS class you can use anywhere, plus a thin React wrapper that handles the accessibility for you.">
+          intro="Thirteen pieces. Each one is a CSS class you can use anywhere, plus a thin React wrapper that handles the accessibility for you.">
           <div className="doc-grid doc-grid--2">
             <Specimen name="Button" note="Primary is the one action that matters most on a screen. Use it once.">
               <div className="doc-row">
@@ -239,7 +239,7 @@ export function App() {
           intro="Most design systems are written for people. Nova also ships a rules file, so an AI coding agent builds with the system instead of inventing new styles.">
           <div className="doc-grid doc-grid--2">
             <Panel>
-              <PanelHeader title="AGENTS.md, in short" />
+              <PanelHeader title="AGENTS.md, in short" level={3} />
               <ol className="doc-rules">
                 <li>Build screens only from Nova components and tokens. No hex codes, no new shadows.</li>
                 <li>If a component is missing, stop and say so. Don't make a near-copy.</li>
@@ -249,7 +249,7 @@ export function App() {
               </ol>
             </Panel>
             <Panel variant="sunken">
-              <PanelHeader title="Try it" action={<Tag>Prompt</Tag>} />
+              <PanelHeader title="Try it" level={3} action={<Tag>Prompt</Tag>} />
               <Display cursor={false} lines={[
                 'Read AGENTS.md first.',
                 'Build a settings screen for a voice assistant',

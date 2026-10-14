@@ -10,7 +10,31 @@
   -webkit-font-smoothing: antialiased;
 }
 
+/* Components size themselves; they never depend on a global box-sizing reset. */
+[class^='nv-'], [class*=' nv-'], [class^='nv-']::before, [class*=' nv-']::before, [class^='nv-']::after, [class*=' nv-']::after { box-sizing: border-box; }
+
+.nv-visually-hidden {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---------- Layout ---------- */
+
+.nv-stack { display: flex; min-width: 0; }
+.nv-page { width: 100%; margin: 0 auto; padding: var(--nv-space-8) var(--nv-space-5); }
+.nv-page--sm { max-width: var(--nv-width-sm); }
+.nv-page--md { max-width: var(--nv-width-md); }
+.nv-page--lg { max-width: var(--nv-width-lg); }
+
 /* ---------- Text ---------- */
+
+.nv-text { font-family: var(--nv-font-sans); }
+.nv-text--primary { color: var(--nv-text); }
+.nv-text--secondary { color: var(--nv-text-2); }
+.nv-text--muted { color: var(--nv-text-3); }
+.nv-text--sm { font-size: var(--nv-size-sm); }
+.nv-text--md { font-size: var(--nv-size-md); }
+.nv-text--lg { font-size: var(--nv-size-lg); }
 
 .nv-label {
   font-family: var(--nv-font-mono);
@@ -138,6 +162,15 @@
 }
 .nv-panel--sunken { background: var(--nv-sunken); box-shadow: var(--nv-shadow-pressed); }
 .nv-panel--flush { padding: 0; overflow: hidden; }
+.nv-panel__title {
+  margin: 0;
+  font-family: var(--nv-font-mono);
+  font-size: var(--nv-size-label);
+  font-weight: var(--nv-weight-semibold);
+  letter-spacing: var(--nv-tracking-label);
+  text-transform: uppercase;
+  color: var(--nv-text-2);
+}
 .nv-panel__header {
   display: flex;
   align-items: center;
@@ -205,8 +238,12 @@ textarea.nv-input { padding: var(--nv-space-4) var(--nv-space-5); min-height: 96
 
 /* ---------- Segmented control ---------- */
 
+.nv-segmented-field { display: grid; gap: var(--nv-space-3); justify-items: start; }
 .nv-segmented {
   display: inline-flex;
+  width: fit-content;
+  max-width: 100%;
+  flex-wrap: wrap;
   gap: var(--nv-space-2);
   padding: var(--nv-space-2);
   border-radius: var(--nv-radius-md);
