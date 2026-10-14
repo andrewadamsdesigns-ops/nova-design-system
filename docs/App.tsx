@@ -101,7 +101,10 @@ export function App() {
           <a href="#in-use">In use</a>
           <a href="#agents">For AI agents</a>
         </nav>
-        <Segmented label="Theme" options={THEMES} value={theme} onChange={setTheme} />
+        <div className="doc-bar__end">
+          <a className="doc-bar__gh" href="https://github.com/andrewadamsdesigns-ops/nova-design-system">GitHub</a>
+          <Segmented label="Theme" options={THEMES} value={theme} onChange={setTheme} />
+        </div>
       </header>
 
       <main id="main">
@@ -260,7 +263,10 @@ export function App() {
         <Divider />
         <footer className="doc-footer">
           <Label>Nova design system · MIT license</Label>
-          <span>Designed by Andrew Adams. Tokens: {Object.keys(tokens.themes).length} themes, one source file.</span>
+          <span>
+            Designed by <a href="https://andrewadamsdesigns.com/">Andrew Adams</a>. {Object.keys(tokens.themes).length} themes, one tokens file.{' '}
+            <a href="https://github.com/andrewadamsdesigns-ops/nova-design-system">Source on GitHub</a>.
+          </span>
         </footer>
       </main>
     </div>

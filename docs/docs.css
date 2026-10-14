@@ -95,3 +95,9 @@ main { max-width: 1120px; margin: 0 auto; padding: 0 32px 64px; }
 }
 
 .doc-row--center .doc-stack { width: auto; justify-items: start; }
+
+.doc-bar__end { display: flex; align-items: center; gap: 20px; }
+.doc-bar__gh, .doc-footer a { font-family: var(--nv-font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--nv-text-2); }
+.doc-footer a { font-family: inherit; font-size: inherit; letter-spacing: 0; text-transform: none; color: var(--nv-text); }
+.doc-bar__gh:focus-visible, .doc-footer a:focus-visible { outline: 2px solid var(--nv-focus); outline-offset: 3px; }
+@media (max-width: 560px) { .doc-bar__gh { display: none; } }

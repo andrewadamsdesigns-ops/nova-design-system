@@ -2,6 +2,8 @@
 
 A retro-modern design system. Warm hardware, soft keys, one orange light.
 
+**Live docs:** [andrewadamsdesigns.com/nova](https://andrewadamsdesigns.com/nova/)
+
 Nova started as a concept for an AI assistant that feels like a well-made piece of equipment instead of a chat window: inspired by vintage consoles and Dieter Rams–style industrial design. This repo turns that look into a system anyone can use, and that an AI coding agent can use without guessing.
 
 ## What's inside
@@ -31,4 +33,4 @@ npm run dev
 
 MIT. Use it, fork it, ship it.
 
-Designed by Andrew Adams.
+Designed by [Andrew Adams](https://andrewadamsdesigns.com). Live docs: [andrewadamsdesigns.com/nova](https://andrewadamsdesigns.com/nova/).
